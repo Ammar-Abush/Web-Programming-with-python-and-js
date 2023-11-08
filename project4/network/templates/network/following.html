@@ -1,0 +1,50 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{%block body%}
+{% for p in posts %}
+
+<div class = "post" data-id="{{ p.id }}" id = "posts" data-post = "{{ p.id }}"  style="border: 1px solid; padding: 16px; margin: 10px; border-radius: 16px;">
+    <a href="{%url 'profile' p.user.username%}"><h4>{{p.user}}</h4></a>
+    <p>{{p.content}}</p>
+    <p>{{p.time}}</p>
+    {%if p.user.username == user.username%}
+        <a class = "btn btn-primary" style="color: white;" href = "{% url 'edit' p.id%}">Edit Post</a>
+    {%endif%}
+    <button class="like-button custom" data-id="{{ p.id }}">
+        {%if user in p.likes.all%}
+            
+            <i class="bi bi-heart-fill"></i>
+        {%else%}
+            <i class="bi bi-heart"></i>
+        {%endif%}
+    </button>
+    <small class = "counter">{{p.likes.count}}</small>
+</div>
+{% empty %}
+<p>No From Followings</p>
+{% endfor %}
+    <br>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          
+        
+        {%if posts.has_previous%}
+            <li class="page-item" ><a class="page-link" href="?page=1">&laquo</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{posts.previous_page_number}}">Previous</a></li>
+        
+        {%endif%}
+
+        <li class="page-item disabled" ><a class="page-link" href="#">Page {{posts.number}} of {{posts.paginator.num_pages}}</a></li>
+
+        {%if posts.has_next%}</li>
+            <li class="page-item" ><a class="page-link" href="?page={{posts.next_page_number}}">Next</a></li>
+            <li class="page-item" ><a class="page-link" href="?page={{posts.paginator.num_pages}}">&raquo</a></li>
+        
+        {%endif%}
+        </ul>
+    </nav>
+{%endblock%}
+
+{% block script %}
+    <script src="{% static 'network/vanilla.js' %}"></script>
+{% endblock %}

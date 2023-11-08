@@ -1,0 +1,13 @@
+{% extends "network/layout.html" %}
+
+{%block body%}
+<div id = "post" style="border: 1px solid; padding: 16px; margin: 10px; border-radius: 16px;">
+    <h3>Create a new post</h3>
+    <form action="{% url 'edit' p.id%}" method="POST">
+        {% csrf_token %}
+        <textarea name="edit" id = "edit" class = "w-75">{{p.content}}</textarea>
+        <br>
+        <input type="submit" value = "Edit" class="btn btn-primary">
+    </form>
+</div>
+{%endblock%}
