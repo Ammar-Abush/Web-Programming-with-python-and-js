@@ -1,0 +1,12 @@
+{%extends 'auctions/logout.html'%}
+
+{%block body%}
+    <h1>{{category}}</h1>
+    {% for l in items %}
+        {%if l.is_open%}
+            <p>l.title</p>
+        {%endif%}
+    {%empty%}
+        <p>No items for this category</p>
+    {%endfor%}
+{%endblock%}

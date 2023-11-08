@@ -1,0 +1,21 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    <div>
+        {% for l in active %}
+            <h1><a href="{%url 'title' l.title%}">{{ l.title }}</a></h1>
+            {{ l.description }}
+            <br>
+            {% if l.image_url != "" %}
+                <img src="{{ l.image_link }}" alt="{{ l.title }}">
+            {% endif %}
+            <div class = "price"> 
+                Current Bid: ${{l.biding.price}}
+            </div>
+            <hr>
+        {% empty %}
+            <h1>No Active Listings.</h1>
+        {% endfor %}
+    </div>
+{% endblock %}

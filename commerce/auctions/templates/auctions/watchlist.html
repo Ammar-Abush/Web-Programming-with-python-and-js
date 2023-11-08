@@ -1,0 +1,17 @@
+{% extends 'auctions/layout.html'%}
+
+{%block body%}
+
+        {% for w in watch%}
+            <a href="{%url 'title' w.title%}">{{w.title}}</a>
+            {%if w.image_link != ''%}
+                <br>
+                <img src="{{ w.image_link }}" alt="{{ w.title }}">
+            {%endif%}
+            <br>
+            ${{w.biding.price}}
+        {%empty%}
+            <h1>No items on your watchlist</h1>
+        {%endfor%}
+
+{%endblock%}

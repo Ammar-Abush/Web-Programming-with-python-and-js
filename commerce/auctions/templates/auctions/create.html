@@ -1,0 +1,20 @@
+{%extends "auctions/layout.html"%}
+{% block body %}
+    <h1>Create New Listing</h1>
+    <div class = "form_container">
+        <form action="{% url 'new' %}" method = "POST" class = "new">
+            {% csrf_token %}
+            Title: <input type="text" name="title", required>
+            <br>
+            Description: <input type="textarea" name = "description", required>
+            <br>
+            Starting bid: <input type="number", min="0" name = "bid", required>
+            <br>
+            Image: <input type="url", name = "image">
+            <br>
+            Category: <input type = "text", name = "category">
+            <br>
+            <input type="submit" value = "Create listing">
+        </form>
+    </div>
+{% endblock %}

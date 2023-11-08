@@ -1,0 +1,12 @@
+{%extends 'auctions/layout.html'%}
+
+{%block body%}
+    <h1>{{category}}</h1>
+    {% for l in items %}
+        {%if l.is_open%}
+            <p><a href="{%url 'title' l.title%}">{{l.title}}</a></p>
+        {%endif%}
+    {%empty%}
+        <p>No items for this category</p>
+    {%endfor%}
+{%endblock%}

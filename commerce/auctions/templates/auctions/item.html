@@ -1,0 +1,88 @@
+{%extends 'auctions/layout.html'%}
+
+{%block body%}
+    <h1>{{item.title}}</h1>
+    {%if user.is_authenticated%}
+        <form action="{% url 'addTowatchlist' item.title %}" method = "POST">
+        {% csrf_token %}
+        {% if w %}
+            <input type = "submit" value = "Remove From watchlist"/>
+        {% else %}
+            <input type = "submit" value = "Add To watchlist"/>
+        {%endif%}
+        </form>
+    {%endif%}
+    {% if item.image_url != "" %}
+        <img src="{{ item.image_link }}" alt="{{ item.title }}" >
+    {% endif %}
+    <br>
+    {{item.description}}
+    <hr>
+    <div class = "biding">
+        Current Pice : ${{item.biding.price}}
+        {%if b and item.is_open%}
+
+            <form action="{% url 'place_bid' item.title %}" method = "POST">
+                {% csrf_token %}
+                <input type="Number" name = "bid" min = "{{item.biding.price}}"  placeholder="{{item.biding.price}}">
+                <input type="submit" value="Place bid">
+            </form>
+        {%endif%}
+    </div>
+
+    {%if item.user == request.user and item.is_open%}
+        <form action="{%url 'close' item.title%}" method = "POST">
+            {% csrf_token %}
+            <input type="Submit" value = "End the bidding">
+        </form>
+    {%endif%}
+    {%if not item.is_open%}
+        {%if request.user == item.biding.user%}
+            <p style="color : blue;">Congrats, You won the bid</p>
+        {%else%}
+            <p style="color : red;">The bidding for this item is closed</p>
+        {%endif%}
+    {%endif%}
+
+    <br>
+    <p>Item Posted By: <a href="{%url 'profile' item.user.username%}">{{item.user.username}}</a></p>
+    <p>Category <a href="{%url 'category_items' item.category.id%}">{{item.category.cat}}</a></p>
+    <br>
+    <div class = "Comments">
+        Comments
+        <hr>
+        <div style="border: solid gray 1px;">
+            {%for comment in c%}
+                {{comment.user.username}}
+                <br>
+                <p>{{comment.comment}}</p>
+                {%if user.is_authenticated%}
+                <form action="{%url 'like' comment.id user.username%}" method = "POST">
+                    {% csrf_token %}
+                    {%if user not in comment.likedBy.all %}
+                        <input type="Submit" value = "like">
+                    {%else%}
+                        <input type="Submit" value="unlike">
+                    {%endif%}
+                </form>
+                {%endif%}
+                {%if comment.likes > 0%}
+                    {{comment.likes}}
+                {%endif%}
+            {%empty%}
+                <p>No comments yet, be the first to comment</p>
+            {%endfor%}
+        </div>
+        <br>
+        {%if request.user.is_authenticated%}
+        <form action="{%url 'comment' item.title%}" method="POST">
+            {% csrf_token %}
+            <textarea name="comment" cols="30" rows="10">Write your Comment here,
+            </textarea>
+            
+            <input type="Submit" value="Post">
+            
+        </form>
+        {%endif%}
+    </div>
+{%endblock%}
